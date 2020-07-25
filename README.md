@@ -1,5 +1,5 @@
 # Flipper
-Flip dot experiments in Node.js
+Flip dot controller in Node.js - to be used with [AlfaZeta XY5](https://flipdots.com/en/products-services/flip-dot-boards-xy5/)
 
 ## Wiring
 | Color      | Signal |

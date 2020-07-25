@@ -1,0 +1,36 @@
+#simulator-container {
+    width: 100%;
+    height: 100%;
+    #dots-container {
+        position: relative;
+        width: 100%;
+        padding: 0;
+        .dot {
+            position: absolute;
+            &::before {
+                content: " ";
+                border-radius: 100%;
+                display: block;
+                width: 100%;
+                height: 100%;
+                background-color: #5c5c5c;
+                transition: transform 0.2s;
+            }
+            &.active {
+                &::before {
+                    background-color: #ffffff;
+                    transform: scaleX(-1);
+                }
+            }
+        }
+    }
+    .btn {
+        font-family: monospace;
+        border: 1px solid #ffffff;
+        background-color: transparent;
+        padding: 1rem;
+        color: #ffffff;
+        font-size: 1.25rem;
+        margin: 1rem;
+    }
+}

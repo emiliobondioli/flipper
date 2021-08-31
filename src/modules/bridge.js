@@ -1,5 +1,5 @@
 import io from 'socket.io-client';
-import EventEmitter from 'events'
+import EventEmitter from '~/utils/event-emitter'
 
 export default class Bridge extends EventEmitter {
     constructor(options) {
@@ -12,7 +12,7 @@ export default class Bridge extends EventEmitter {
     }
 
     send(data) {
-        const buffer = Buffer.from(data)
-        this.socket.emit('data', { data: buffer })
+        // const buffer = Buffer.from(data)
+        // this.socket.emit('data', { data: buffer })
     }
 }

@@ -1,7 +1,7 @@
-.idea
-/node_modules
+node_modules
+.DS_Store
 dist
-.env
-DS_STORE
-old/
+dist-ssr
+*.local
+
 config.js

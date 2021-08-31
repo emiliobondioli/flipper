@@ -1,0 +1,34 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+main {
+  height: 100%;
+  width: 100%;
+  font-size: 100%;
+  font-family: "Roboto", sans-serif;
+  text-align: center;
+  font-weight: lighter;
+  padding: 1rem;
+  overflow: hidden;
+  margin: 0;
+  background-color: #333333;
+}
+
+.fps-counter {
+  font-family: monospace;
+  color: #ffffff;
+}
+
+canvas {
+  background-color: #cccccc;
+  image-rendering: pixelated;
+}
+
+* {
+  -webkit-font-smoothing: none;
+  box-sizing: border-box;
+  -webkit-text-size-adjust: none;
+}

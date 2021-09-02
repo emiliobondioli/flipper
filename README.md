@@ -17,7 +17,7 @@ Flip dot controller library - to be used with [AlfaZeta XY5](https://flipdots.co
 npm i @ebondioli/flipper
 ```
 
-## Middleware
+## Controller
 
 The `controller` module is required for serial communication with the flip dot panels. Since it requires `serialport` it must be run in NodeJS context. It communicates with the client through a websocket.
 
@@ -53,8 +53,9 @@ const client = new FlipperClient({
         port: 3001
     }
     stage: {
-        panels: []
-    }
+        panels: [/** panel list, see below for options */]
+    },
+    mock: false // if true disables serial communication
 })
 
 client.set(0, 0, true | false | 'toggle') // Flips, unflips or toggles a single dot at (0,0)
@@ -73,7 +74,7 @@ const config = {
     port: 3001,
   },
   stage: {
-    // varies depending on the type of panel used, defaults are for AlfaZeta XY5
+    // configuration for different panel types and dimensions, defaults are for AlfaZeta XY5
     panelConfig: {
         width: 28,
         height: 7,

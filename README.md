@@ -68,7 +68,7 @@ const panels = [
         width: 28,
         height: 7
     }
-    // Dot buffer
+    // used to align the simulator view with the real panels positioning
     offset: {
         x: 0,
         y: 0
@@ -76,4 +76,19 @@ const panels = [
   },
   ...
 ]
+```
+
+## Simulator
+A simple simulator is provided as a separate module for ease of development. It connects to the `client` module and replicates the panels configuration and positioning. 
+
+```js
+import FlipperClient from 'flipper/client'
+import FlipperSimulator from 'flipper/simulator'
+
+const client = new FlipperClient(config);
+// Istantiate the simulator passing the client instance to connect to and a dom element where to mount it
+const simulator = new FlipperSimulator(client, document.querySelector("#app"));
+
+// Call after the client has been updated, e.g. in an interval or requestAnimationFrame
+simulator.update()
 ```

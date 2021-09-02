@@ -39,7 +39,7 @@ export default class Stage {
     private panelConfig: PanelConfig | undefined
 
     constructor(config: StageConfig) {
-        config = {...defaults, ...config || {}}
+        config = { ...defaults, ...config || {} }
         this.panelConfig = config.panelConfig || defaults.panelConfig
         this.width = Math.max(...config.panels.map(p => p.bounds.x + p.bounds.width))
         this.height = Math.max(...config.panels.map(p => p.bounds.y + p.bounds.height))
@@ -99,18 +99,18 @@ export default class Stage {
      * Set the status of a single dot
      * @param {number} x - The x coordinate
      * @param {number} y - The y coordinate
-     * @param {number,boolean, string} value - 0: off, 1: on, 'toggle': toggle on/off
+     * @param {number,boolean} value - 0: off, 1: on
      */
-    set(x: number | Dot, y: number, value: number | boolean | string): boolean;
+    set(x: number | Dot, y: number, value: number | boolean): boolean;
 
     /**
      * Set the status of a single dot
      * @param {Dot} dot - The x coordinate
-     * @param {number,boolean, string} value - 0: off, 1: on, 'toggle': toggle on/off
+     * @param {number,boolean} value - 0: off, 1: on
      */
-    set(dot: Dot, value: number | boolean | string): boolean;
+    set(dot: Dot, value: number | boolean): boolean;
 
-    set(x: number | Dot, y: number | boolean | string, value: number | boolean | string = 1): boolean {
+    set(x: number | Dot, y: number | boolean, value: number | boolean = 1): boolean {
         if (typeof x === "number") return this.setCoordinates(x, Number(y), !!value)
         else return this.setDot(x, !!y)
     }
@@ -119,9 +119,9 @@ export default class Stage {
      * Set the status of a single dot
      * @param {number} x - The x coordinate
      * @param {number} y - The y coordinate
-     * @param {number,string} value - 0: off, 1: on, 'toggle': toggle on/off
+     * @param {number,string} value - 0: off, 1: on
      */
-    setCoordinates(x: number, y: number, value: number | boolean | string = 1): boolean {
+    setCoordinates(x: number, y: number, value: number | boolean = 1): boolean {
         let d: Dot = this.matrix[x][y]
         return this.setDot(d, value)
     }
@@ -129,15 +129,51 @@ export default class Stage {
     /**
      * Set the status of a single dot
      * @param {Dot} dot - The x coordinate
-     * @param {number} y - The y coordinate
-     * @param {number,string} value - 0: off, 1: on, 'toggle': toggle on/off
+     * @param {number,string} value - 0: off, 1: on
      */
-    setDot(dot: Dot, value: number | boolean | string = 1): boolean {
-        if (value === 'toggle') dot.value = !dot.value
-        else dot.value = !!value
+    setDot(dot: Dot, value: number | boolean = 1): boolean {
+        dot.value = !!value
         if (dot.value) this.buffer[dot.bufferId] = bitset(this.buffer[dot.bufferId], dot.row)
         else this.buffer[dot.bufferId] = bitclear(this.buffer[dot.bufferId], dot.row)
         return dot.value
+    }
+
+    /**
+     * Toggle status of a single dot
+     * @param {number} x - The x coordinate
+     * @param {number} y - The y coordinate
+     * @param {number,boolean} value - 0: off, 1: on
+     */
+    toggle(x: number | Dot, y: number, value: number | boolean): boolean;
+
+    /**
+     * Set the status of a single dot
+     * @param {Dot} dot - The x coordinate
+     * @param {number,boolean} value - 0: off, 1: on
+     */
+    toggle(dot: Dot, value: number | boolean): boolean;
+
+    toggle(x: number | Dot, y: number | boolean, value: number | boolean = 1): boolean {
+        if (typeof x === "number") return this.toggleCoordinates(x, Number(y), !!value)
+        else return this.setDot(x, !!y)
+    }
+
+    /**
+     * Toggle the status of a single dot
+     * @param {number} x - The x coordinate
+     * @param {number} y - The y coordinate
+     */
+    toggleCoordinates(x: number, y: number): boolean {
+        let d: Dot = this.matrix[x][y]
+        return this.toggleDot(d)
+    }
+
+    /**
+     * Toggle the status of a single dot
+     * @param {Dot} dot - The x coordinate
+     */
+    toggleDot(dot: Dot) {
+        return this.setDot(dot, !dot.value)
     }
 
     /**

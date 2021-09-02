@@ -20,6 +20,8 @@ npm i @ebondioli/flipper
 
 The `controller` module is required for serial communication with the flip dot panels. Since it requires `serialport` it must be run in NodeJS context. It communicates with the client through a websocket.
 
+Example usage in a middleware script:
+
 ```js
 const FlipperController = require('flipper/controller')
 const controller = new FlipperController({
@@ -38,7 +40,9 @@ const controller = new FlipperController({
 
 ## Client
 
-The `client` module translates x/y coordinates to the related flip dot bytes. `set`, `get` and `fill` methods are used to interact with the dots:
+The `client` module translates x/y coordinates to the related flip dot bytes. `set`, `get` and `fill` methods are used to interact with the dots.
+
+Example usage in a browser/frontend app:
 
 ```js
 import FlipperClient from 'flipper/client'
@@ -86,6 +90,8 @@ const panels = [
 
 ## Simulator
 A simple simulator is provided as a separate module for ease of development. It connects to the `client` module and replicates the panels configuration and positioning. 
+
+Example usage in a browser/frontend app:
 
 ```js
 import FlipperClient from 'flipper/client'

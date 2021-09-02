@@ -20,24 +20,26 @@ const defaults: ClientConfig = {
                 height: 7
             }
         }]
-    }
+    },
+    mock: false
 }
 
 export default class Client extends Stage {
-    private socket: WebSocket;
+    private socket: WebSocket | null;
     public config: ClientConfig;
 
     constructor(config: ClientConfig) {
         super(config.stage)
         this.config = { ...defaults, ...config };
-        this.socket = new WebSocket(`${this.config.socket.url}:${this.config.socket.port}`)
+        if(!this.config.mock) this.socket = new WebSocket(`${this.config.socket.url}:${this.config.socket.port}`)
+        else this.socket = null
     }
 
     /**
      * Sends the current buffer to the flip-dot middleware
      */
     send(): void {
-        this.socket.send(JSON.stringify(this.buffer))
+        if(this.socket) this.socket.send(JSON.stringify(this.buffer))
     }
 
 }

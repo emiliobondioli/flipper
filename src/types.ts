@@ -18,7 +18,8 @@ export interface ClientConfig {
         url: string
         port?: number | string
     }
-    stage: StageConfig
+    stage: StageConfig,
+    mock: boolean,
 };
 
 export interface StageConfig {

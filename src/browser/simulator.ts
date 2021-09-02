@@ -2,10 +2,9 @@ import Client from "./client"
 import './simulator.scss'
 
 export default class Simulator {
-    client: Client;
-    el: HTMLElement
-    container: HTMLElement
-    dots: Array<{
+    public container: HTMLElement
+    private client: Client;
+    private dots: Array<{
         el: HTMLElement,
         x: number,
         y: number
@@ -13,11 +12,10 @@ export default class Simulator {
 
     constructor(client: Client, el: HTMLElement) {
         this.client = client
-        this.el = el
         this.dots = []
         this.container = document.createElement('div')
         this.container.classList.add('flip-dot-simulator')
-        this.el.appendChild(this.container)
+        el.appendChild(this.container)
         this.setup()
     }
 

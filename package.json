@@ -22,9 +22,8 @@
   },
   "scripts": {
     "dev": "vite",
-    "def": "tsc src/main.ts -t es5 --allowJs --declaration --emitDeclarationOnly --sourceMap --esModuleInterop --outDir dist",
     "build": "tsc && vite build",
-    "package": "npm run build && npm run def",
+    "postbuild": "tsc src/main.ts -t es5 --allowJs --declaration --emitDeclarationOnly --sourceMap --esModuleInterop --outDir dist",
     "serve": "vite preview"
   },
   "devDependencies": {

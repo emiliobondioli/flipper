@@ -23,7 +23,7 @@ The `controller` module is required for serial communication with the flip dot p
 Example usage in a middleware script:
 
 ```js
-const FlipperController = require('flipper/controller')
+const FlipperController = require('@ebondioli/flipper/controller')
 const controller = new FlipperController({
     socket: {
         url: 'ws://localhost'
@@ -45,7 +45,7 @@ The `client` module translates x/y coordinates to the related flip dot bytes. `s
 Example usage in a browser/frontend app:
 
 ```js
-import FlipperClient from 'flipper/client'
+import FlipperClient from '@ebondioli/flipper/client'
 const client = new FlipperClient({
     socket: {
         url: 'ws://localhost'
@@ -94,8 +94,8 @@ A simple simulator is provided as a separate module for ease of development. It 
 Example usage in a browser/frontend app:
 
 ```js
-import FlipperClient from 'flipper/client'
-import FlipperSimulator from 'flipper/simulator'
+import FlipperClient from '@ebondioli/flipper/client'
+import FlipperSimulator from '@ebondioli/flipper/simulator'
 
 const client = new FlipperClient(config);
 // Istantiate the simulator passing the client instance to connect to and a dom element where to mount it

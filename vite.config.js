@@ -25,7 +25,6 @@ module.exports = defineConfig({
         {
           entryFileNames: (entry) => `${entry.name}.cjs.js`,
           format: "commonjs",
-          exports: "named",
           dir: resolve(__dirname, "dist"),
         },
       ],

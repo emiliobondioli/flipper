@@ -45,7 +45,9 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "postbuild": "tsc src/main.ts -t es5 --allowJs --declaration --emitDeclarationOnly --sourceMap --esModuleInterop --outDir dist",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "release:patch": "npm run build && npm version patch && npm publish",
+    "release:minor": "npm run build && npm version minor && npm publish"
   },
   "devDependencies": {
     "@types/express": "^4.17.13",

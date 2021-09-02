@@ -13,7 +13,7 @@ Flip dot controller library - to be used with [AlfaZeta XY5](https://flipdots.co
 
 ## Middleware
 
-The controller module is required for serial communication with the flip dot panels. Since it requires `serialport` it must be run in NodeJS context. It communicates with the client through a websocket.
+The `controller` module is required for serial communication with the flip dot panels. Since it requires `serialport` it must be run in NodeJS context. It communicates with the client through a websocket.
 
 ```js
 const FlipperController = require('flipper/controller')
@@ -33,7 +33,7 @@ const controller = new FlipperController({
 
 ## Client
 
-The client module translates x/y coordinates to the related flip dot bytes. `set`, `get` and `fill` methods are used to interact with the dots:
+The `client` module translates x/y coordinates to the related flip dot bytes. `set`, `get` and `fill` methods are used to interact with the dots:
 
 ```js
 import FlipperClient from 'flipper/client'
@@ -54,12 +54,13 @@ client.send() // Sends the current buffer to the middleware, usually called on a
 
 ### Configuration
 
-The client expects an array of objects describing each panel's configuration.
+The `client` expects an array of objects describing each panel's configuration.
 
 ```js
 const panels = [
   {
-    // Panel address in binary, note: 2 (0b10) is ignored
+    // Panel address in binary
+    // note: for some reason address 2 (0b10) does not work with the current flip dot panels
     address: 0b01,
     // Panel dimensions
     bounds: {
@@ -67,8 +68,8 @@ const panels = [
         y: 0,
         width: 28,
         height: 7
-    }
-    // used to align the simulator view with the real panels positioning
+    },
+    // used to align the simulator view with the actual panels positioning
     offset: {
         x: 0,
         y: 0

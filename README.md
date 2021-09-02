@@ -1,82 +1,94 @@
 # Flipper
-Flip dot controller in Node.js - to be used with [AlfaZeta XY5](https://flipdots.com/en/products-services/flip-dot-boards-xy5/)
+
+Flip dot controller library - to be used with [AlfaZeta XY5](https://flipdots.com/en/products-services/flip-dot-boards-xy5/)
 
 ## Wiring
-| Color      | Signal |
-| ----------- | ----------- |
-| Red      | +24V       |
-| Black   | -24V / GND        |
-| Green      | -RS485       |
-| Blue      | +RS485       |
 
-## Setup
-`npm install`
+| Color | Signal     |
+| ----- | ---------- |
+| Red   | +24V       |
+| Black | -24V / GND |
+| Green | -RS485     |
+| Blue  | +RS485     |
 
-## Launch middleware
-The middleware needs to be running to use the panel. It communicates with the flip-dot panels through a usb serial port using RS485 protocol.
+## Middleware
 
-You need to set the serial port in a `.env` file:
-```env
-PORT=COM22
+The controller module is required for serial communication with the flip dot panels. Since it requires `serialport` it must be run in NodeJS context. It communicates with the client through a websocket.
+
+```js
+const FlipperController = require('flipper/controller')
+const controller = new FlipperController({
+    socket: {
+        url: 'ws://localhost'
+        port: 3001
+    }
+    serial: {
+        port: '/dev/ttyUSB0'
+        baudRate: 57600
+    }
+    mock: false,    // if true disables serial communication
+    rate: 60;       // serial messages per second
+})
 ```
 
-To find out your port run with the device connected:
-```shell
-npx @serialport/list
+## Client
+
+The client module translates x/y coordinates to the related flip dot bytes. `set`, `get` and `fill` methods are used to interact with the dots:
+
+```js
+import FlipperClient from 'flipper/client'
+const client = new FlipperClient({
+    socket: {
+        url: 'ws://localhost'
+        port: 3001
+    }
+    stage: {
+        panels: []
+    }
+})
+
+client.set(0, 0, true | false | 'toggle') // Flips, unflips or toggles a single dot at (0,0)
+client.fill(true | false | 'toggle') // Flips, unflips or toggles all dots
+client.send() // Sends the current buffer to the middleware, usually called on an interval or requestAnimationFrame
 ```
 
-To launch the middleware use:
-
-`node serial.js`
-
-## How it works
 ### Configuration
-The middleware expects an array of objects describing each panel's configuration.
+
+The client expects an array of objects describing each panel's configuration.
 
 ```js
 const panels = [
   {
     // Panel address in binary, note: 2 (0b10) is ignored
-    address: 0b01, 
+    address: 0b01,
     // Panel dimensions
-    bounds: { 
-      width: 28,
-      height: 7
+    bounds: {
+        x: 0,
+        y: 0,
+        width: 28,
+        height: 7
     }
-    // Dot buffer
-    buffer: [...]
+    // used to align the simulator view with the real panels positioning
+    offset: {
+        x: 0,
+        y: 0
+    }
   },
   ...
 ]
 ```
-The **dot buffer** is a unidimensional array of values, depending on the type of data you're sending it can be:
-- your grid, ordered by columns (ex. `[c1.0, c1.1, c1.2, c1.3, c1.4, c1.5, c1.6, c2.0, c2.1, ...]`)
-- a pixel buffer with rgb values, taken directly from `context.getImageData`, the middleware will sort out the correct order of rows and columns based on the panel dimensions you set in the config object.
 
-### Communication
-The app communicates with the middleware using [socket.io](https://github.com/socketio/socket.io).
-To send grid data to the panel use:
+## Simulator
+A simple simulator is provided as a separate module for ease of development. It connects to the `client` module and replicates the panels configuration and positioning. 
+
 ```js
-socket.emit("grid-data", {
-  panels: panels // panels is the array containing all your panels
-})
+import FlipperClient from 'flipper/client'
+import FlipperSimulator from 'flipper/simulator'
+
+const client = new FlipperClient(config);
+// Istantiate the simulator passing the client instance to connect to and a dom element where to mount it
+const simulator = new FlipperSimulator(client, document.querySelector("#app"));
+
+// Call after the client has been updated, e.g. in an interval or requestAnimationFrame
+simulator.update()
 ```
-To send pixel data to the panel use:
-```js
-socket.emit("pixel-data", {
-  panels: panels // panels is the array containing all your panels
-})
-```
-## Applications
-
-### Simulator
-Simulate the output.
-
-`npm run sim`
-
-Communication with the flip dot display is mantained, you can also test the output on the display.
-
-### Flip-dot tests
-Test various applications and serial communication.
-
-`npm run dev`

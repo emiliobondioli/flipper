@@ -1,64 +1,43 @@
 {
-    "name": "flipper-control",
-    "version": "2.0.0",
-    "description": "",
-    "main": "index.js",
-    "scripts": {
-        "test": "node -r esm middleware/serial-test.js",
-        "start": "npm run build && http-server dist",
-        "dev": "webpack-dev-server --config webpack.dev.js --mode development",
-        "build": "webpack --config webpack.prod.js --mode production",
-        "preview": "npm run build && http-server dist",
-        "serial": "node middleware/serial-controller.js"
+  "name": "flipper",
+  "version": "0.0.0",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/flipper.cjs.js",
+  "module": "./dist/flipper.es.js",
+  "exports": {
+    "./client": {
+      "import": "./dist/client/index.es.js",
+      "require": "./dist/client/index.cjs.js"
     },
-    "repository": {
-        "type": "git",
-        "url": ""
+    "./controller": {
+      "import": "./dist/controller/index.es.js",
+      "require": "./dist/controller/index.cjs.js"
     },
-    "keywords": [],
-    "author": "Emilio Bondioli",
-    "license": "ISC",
-    "bugs": {
-        "url": ""
-    },
-    "homepage": "",
-    "dependencies": {
-        "@serialport/list": "^1.1.0",
-        "chroma-js": "^2.0.6",
-        "dotenv": "^8.1.0",
-        "esm": "^3.2.25",
-        "ml5": "^0.4.3",
-        "normalize.css": "^8.0.1",
-        "serialport": "^7.1.2",
-        "socket.io": "^2.1.1",
-        "socket.io-client": "^2.0.4"
-    },
-    "devDependencies": {
-        "@fullhuman/postcss-purgecss": "^1.2.0",
-        "ajv": "^6.10.2",
-        "autoprefixer": "^9.6.1",
-        "babel-core": "^6.26.3",
-        "babel-loader": "^7.1.5",
-        "babel-plugin-transform-object-rest-spread": "^6.26.0",
-        "babel-polyfill": "^6.26.0",
-        "babel-preset-env": "^1.7.0",
-        "clean-webpack-plugin": "^0.1.19",
-        "css-loader": "^0.28.11",
-        "cssnano": "^3.10.0",
-        "favicons-webpack-plugin": "0.0.9",
-        "file-loader": "^1.1.11",
-        "html-webpack-plugin": "^3.2.0",
-        "http-server": "^0.11.1",
-        "mini-css-extract-plugin": "^0.5.0",
-        "node-sass": "^4.12.0",
-        "optimize-css-assets-webpack-plugin": "^4.0.3",
-        "postcss-loader": "^2.1.6",
-        "sass-loader": "^6.0.7",
-        "source-map-loader": "^0.2.4",
-        "style-loader": "^0.20.3",
-        "url-loader": "^1.1.2",
-        "webpack": "^4.39.3",
-        "webpack-cli": "^3.3.7",
-        "webpack-dev-server": "^3.8.0"
+    "./simulator": {
+      "import": "./dist/simulator/index.es.js",
+      "require": "./dist/simulator/index.cjs.js"
     }
+  },
+  "scripts": {
+    "dev": "vite",
+    "def": "tsc src/main.ts -t es5 --allowJs --declaration --emitDeclarationOnly --sourceMap --esModuleInterop --outDir dist",
+    "build": "tsc && vite build",
+    "package": "npm run build && npm run def",
+    "serve": "vite preview"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.13",
+    "@types/express-ws": "^3.0.1",
+    "@types/serialport": "^8.0.2",
+    "sass": "^1.38.2",
+    "typescript": "^4.3.2",
+    "vite": "^2.5.1"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-ws": "^5.0.2",
+    "serialport": "^9.2.0"
+  }
 }

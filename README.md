@@ -11,6 +11,11 @@ Flip dot controller library - to be used with [AlfaZeta XY5](https://flipdots.co
 | Green | -RS485     |
 | Blue  | +RS485     |
 
+## Install
+```
+npm i @ebondioli/flipper
+```
+
 ## Middleware
 
 The `controller` module is required for serial communication with the flip dot panels. Since it requires `serialport` it must be run in NodeJS context. It communicates with the client through a websocket.

@@ -1,0 +1,23 @@
+.flip-dot-simulator {
+    position: relative;
+    width: 100%;
+    padding: 0;
+    .dot {
+      position: absolute;
+      &::before {
+        content: " ";
+        border-radius: 100%;
+        display: block;
+        width: 100%;
+        height: 100%;
+        background-color: #363636;
+        transition: transform 0.2s;
+      }
+      &.active {
+        &::before {
+          background-color: #e2e2e2;
+          transform: scaleX(-1);
+        }
+      }
+    }
+  }

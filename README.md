@@ -7,7 +7,7 @@ Flip dot controller library - to be used with [AlfaZeta XY5](https://flipdots.co
 | Color | Signal     |
 | ----- | ---------- |
 | Red   | +24V       |
-| Black | -24V / GND |
+| Black | GND        |
 | Green | -RS485     |
 | Blue  | +RS485     |
 
@@ -27,15 +27,15 @@ Example usage in a middleware script:
 const FlipperController = require('@ebondioli/flipper/controller')
 const controller = new FlipperController({
     socket: {
-        url: 'ws://localhost'
+        url: 'ws://localhost',
         port: 3001
-    }
+    },
     serial: {
-        port: '/dev/ttyUSB0'
+        port: '/dev/ttyUSB0',
         baudRate: 57600
     }
     mock: false,    // if true disables serial communication
-    rate: 60;       // serial messages per second
+    rate: 60       // serial messages per second
 })
 ```
 
@@ -49,18 +49,18 @@ Example usage in a browser/frontend app:
 import FlipperClient from '@ebondioli/flipper/client'
 const client = new FlipperClient({
     socket: {
-        url: 'ws://localhost'
+        url: 'ws://localhost',
         port: 3001
-    }
+    },
     stage: {
         panels: [/** panel list, see below for options */]
     },
     mock: false // if true disables socket communication
 })
 
-client.set(0, 0, true | false | 'toggle') // Flips, unflips or toggles a single dot at (0,0)
-client.fill(true | false | 'toggle') // Flips, unflips or toggles all dots
-client.send() // Sends the current buffer to the middleware, usually called on an interval or requestAnimationFrame
+client.set(0, 0, true | false | 'toggle') // flips, unflips or toggles a single dot at (0,0)
+client.fill(true | false | 'toggle') // flips, unflips or toggles all dots
+client.send() // sends the current buffer to the middleware, usually called on an interval or requestAnimationFrame
 ```
 
 ### Configuration
@@ -83,10 +83,10 @@ const config = {
     }
     panels: [
       {
-        // Panel address in binary
+        // panel address in binary
         // note: for some reason address 2 (0b10) does not work with the current flip dot panels
         address: 0b01,
-        // Panel dimensions
+        // panel dimensions
         bounds: {
           x: 0,
           y: 0,
@@ -115,9 +115,14 @@ import FlipperClient from "@ebondioli/flipper/client";
 import FlipperSimulator from "@ebondioli/flipper/simulator";
 
 const client = new FlipperClient(config);
-// Istantiate the simulator passing the client instance to connect to and a dom element where to mount it
+// istantiate the simulator passing the client instance to connect to and a dom element where to mount it
 const simulator = new FlipperSimulator(client, document.querySelector("#app"));
 
-// Call after the client has been updated, e.g. in an interval or requestAnimationFrame
+// call after the client has been updated to update the simulator view, e.g. in an interval or requestAnimationFrame
 simulator.update();
 ```
+The default css for the simulator can be included using:
+```js
+import "@ebondioli/flipper/simulator/style";
+``` 
+

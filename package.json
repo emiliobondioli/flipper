@@ -35,6 +35,10 @@
     "./simulator": {
       "import": "./dist/simulator/index.es.js",
       "require": "./dist/simulator/index.cjs.js"
+    },
+    "./simulator/style": {
+      "import": "./dist/style.css",
+      "require": "./dist/style.css"
     }
   },
   "scripts": {

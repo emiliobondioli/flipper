@@ -1,4 +1,5 @@
 import Client from "./client"
+import './simulator.scss'
 
 export default class Simulator {
     client: Client;

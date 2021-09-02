@@ -1,4 +1,4 @@
-import { Dot, StageConfig } from "../types"
+import { Dot, StageConfig, PanelConfig } from "../types"
 import { bitclear, bitset } from "../utils"
 import Panel from "./panel"
 
@@ -36,10 +36,11 @@ export default class Stage {
     }
     public matrix: Array<Array<Dot>>;
     private panels: Array<Panel>;
-    private config: StageConfig;
+    private panelConfig: PanelConfig | undefined
 
     constructor(config: StageConfig) {
-        this.config = { ...defaults, ...config }
+        config = {...defaults, ...config || {}}
+        this.panelConfig = config.panelConfig || defaults.panelConfig
         this.width = Math.max(...config.panels.map(p => p.bounds.x + p.bounds.width))
         this.height = Math.max(...config.panels.map(p => p.bounds.y + p.bounds.height))
         this.maxOffset = {
@@ -62,10 +63,10 @@ export default class Stage {
      */
     init() {
         let id = 0
-        const PANEL_W = this.config.panelConfig?.width || 28
-        const PANEL_H = this.config.panelConfig?.width || 7
-        const PANEL_TERMINATOR = new Uint8Array(this.config.panelConfig?.terminator || [0x8F])
-        const PANEL_HEADER = this.config.panelConfig?.header || [0x80, 0x85]
+        const PANEL_W = this.panelConfig?.width || 28
+        const PANEL_H = this.panelConfig?.width || 7
+        const PANEL_TERMINATOR = new Uint8Array(this.panelConfig?.terminator || [0x8F])
+        const PANEL_HEADER = this.panelConfig?.header || [0x80, 0x85]
         this.panels.forEach((panel, i) => {
             const header = new Uint8Array([...PANEL_HEADER, panel.address])
             const start = i * this.bufferSize
@@ -172,7 +173,7 @@ export default class Stage {
     }
 
     get bufferSize() {
-        const config = this.config.panelConfig
+        const config = this.panelConfig
         if (!config) return 32
         return (config.header.length + 1) + config.terminator.length + config.width
     }

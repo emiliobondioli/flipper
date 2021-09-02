@@ -1,10 +1,10 @@
-import { PanelConfig } from '../types'
+import { PanelOptions } from '../types'
 
 export default class Panel {
-    public config: PanelConfig;
+    public config: PanelOptions;
     public address: number;
 
-    constructor(config: PanelConfig) {
+    constructor(config: PanelOptions) {
         this.config = config
         this.address = config.address
     }

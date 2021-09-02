@@ -22,16 +22,18 @@ export interface ClientConfig {
 };
 
 export interface StageConfig {
-    panels: Array<PanelConfig>,
-    panelConfig?: {
-        width: number,
-        height: number,
-        header: Array<number>,
-        terminator: Array<number>
-    }
+    panels: Array<PanelOptions>,
+    panelConfig?: PanelConfig
 };
 
 export interface PanelConfig {
+    width: number,
+    height: number,
+    header: Array<number>,
+    terminator: Array<number>
+};
+
+export interface PanelOptions {
     address: number,
     bounds: PanelBounds,
     offset: {

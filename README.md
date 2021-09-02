@@ -4,12 +4,12 @@ Flip dot controller library - to be used with [AlfaZeta XY5](https://flipdots.co
 
 ## Wiring
 
-| Color | Signal     |
-| ----- | ---------- |
-| Red   | +24V       |
-| Black | GND        |
-| Green | -RS485     |
-| Blue  | +RS485     |
+| Color | Signal |
+| ----- | ------ |
+| Red   | +24V   |
+| Black | GND    |
+| Green | -RS485 |
+| Blue  | +RS485 |
 
 ## Install
 
@@ -46,21 +46,24 @@ The `client` module translates x/y coordinates to the related flip dot bytes. `s
 Example usage in a browser/frontend app:
 
 ```js
-import FlipperClient from '@ebondioli/flipper/client'
+import FlipperClient from "@ebondioli/flipper/client";
 const client = new FlipperClient({
-    socket: {
-        url: 'ws://localhost',
-        port: 3001
-    },
-    stage: {
-        panels: [/** panel list, see below for options */]
-    },
-    mock: false // if true disables socket communication
-})
+  socket: {
+    url: "ws://localhost",
+    port: 3001,
+  },
+  stage: {
+    panels: [
+      /** panel list, see below for options */
+    ],
+  },
+  mock: false, // if true disables socket communication
+});
 
-client.set(0, 0, true | false | 'toggle') // flips, unflips or toggles a single dot at (0,0)
-client.fill(true | false | 'toggle') // flips, unflips or toggles all dots
-client.send() // sends the current buffer to the middleware, usually called on an interval or requestAnimationFrame
+client.set(0, 0, true | false);       // flips or unflips a single dot at (0,0)
+client.toggle(0, 0);                  // toggles a single dot at (0,0)
+client.fill(true | false | "toggle"); // flips, unflips or toggles all dots
+client.send();                        // sends the current buffer to the middleware, usually called on an interval or requestAnimationFrame
 ```
 
 ### Configuration
@@ -121,8 +124,9 @@ const simulator = new FlipperSimulator(client, document.querySelector("#app"));
 // call after the client has been updated to update the simulator view, e.g. in an interval or requestAnimationFrame
 simulator.update();
 ```
+
 The default css for the simulator can be included using:
+
 ```js
 import "@ebondioli/flipper/simulator/style";
-``` 
-
+```

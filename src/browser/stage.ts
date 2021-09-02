@@ -147,14 +147,13 @@ export default class Stage {
     toggle(x: number | Dot, y: number, value: number | boolean): boolean;
 
     /**
-     * Set the status of a single dot
+     * Toggle the status of a single dot
      * @param {Dot} dot - The x coordinate
-     * @param {number,boolean} value - 0: off, 1: on
      */
     toggle(dot: Dot, value: number | boolean): boolean;
 
-    toggle(x: number | Dot, y: number | boolean, value: number | boolean = 1): boolean {
-        if (typeof x === "number") return this.toggleCoordinates(x, Number(y), !!value)
+    toggle(x: number | Dot, y: number | boolean): boolean {
+        if (typeof x === "number") return this.toggleCoordinates(x, Number(y))
         else return this.setDot(x, !!y)
     }
 

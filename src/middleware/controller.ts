@@ -26,7 +26,7 @@ export default class FlipdotController {
     constructor(config: ControllerConfig) {
         this.config = { ...defaults, ...config };
         this.app = expressWs(express()).app;
-        this.app.listen(this.config.socket.port || 3000, () => console.error(`listening on http://localhost:${this.config.socket.port}/`));
+        this.app.listen(this.config.socket.port, () => console.log(`flipper controller listening on ${this.config.socket.url}:${this.config.socket.port}/`));
         if (!this.config.mock) {
             this.serial = new SerialPort(this.config.serial.port, {
                 baudRate: 57600,

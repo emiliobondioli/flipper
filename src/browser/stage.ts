@@ -2,10 +2,29 @@ import { Dot, StageConfig } from "../types"
 import { bitclear, bitset } from "../utils"
 import Panel from "./panel"
 
-const PANEL_TERMINATOR = new Uint8Array([0x8F])
-const PANEL_W = 28
-const PANEL_H = 7
-const PANEL_BUFFER_SIZE = 32
+const defaults: StageConfig = {
+    panelConfig: {
+        width: 28,
+        height: 7,
+        header: [0x80, 0x85],
+        terminator: [0x8F]
+    },
+    panels: [
+        {
+            address: 0b01,
+            bounds: {
+                x: 0,
+                y: 0,
+                width: 28,
+                height: 7,
+            },
+            offset: {
+                x: 0,
+                y: 0,
+            },
+        },
+    ],
+}
 
 export default class Stage {
     public width: number
@@ -17,8 +36,10 @@ export default class Stage {
     }
     public matrix: Array<Array<Dot>>;
     private panels: Array<Panel>;
+    private config: StageConfig;
 
     constructor(config: StageConfig) {
+        this.config = { ...defaults, ...config }
         this.width = Math.max(...config.panels.map(p => p.bounds.x + p.bounds.width))
         this.height = Math.max(...config.panels.map(p => p.bounds.y + p.bounds.height))
         this.maxOffset = {
@@ -31,7 +52,7 @@ export default class Stage {
             return (a.x * 1000 + a.y) - (b.x * 1000 + b.y)
         })
         this.matrix = []
-        const bufferLength = PANEL_BUFFER_SIZE * this.panels.length
+        const bufferLength = this.bufferSize * this.panels.length
         this.buffer = new Uint8Array(bufferLength)
         this.init()
     }
@@ -41,12 +62,17 @@ export default class Stage {
      */
     init() {
         let id = 0
+        const PANEL_W = this.config.panelConfig?.width || 28
+        const PANEL_H = this.config.panelConfig?.width || 7
+        const PANEL_TERMINATOR = new Uint8Array(this.config.panelConfig?.terminator || [0x8F])
+        const PANEL_HEADER = this.config.panelConfig?.header || [0x80, 0x85]
         this.panels.forEach((panel, i) => {
-            const start = i * PANEL_BUFFER_SIZE
-            this.buffer.set(panel.header, start)
-            const dot_start = start + panel.header.length
-            const end = start + PANEL_BUFFER_SIZE - 1
-            console.log(`Generating panel ${i} |`, `start: ${start} - dot_start:${dot_start} - end: ${end}`)
+            const header = new Uint8Array([...PANEL_HEADER, panel.address])
+            const start = i * this.bufferSize
+            this.buffer.set(header, start)
+            const dot_start = start + header.length
+            const end = start + this.bufferSize - 1
+
             for (let c = 0; c < PANEL_W; c++) {
                 const x = panel.bounds.x + c
                 this.matrix[x] = this.matrix[x] || []
@@ -143,5 +169,11 @@ export default class Stage {
                 this.set(dot, value)
             })
         })
+    }
+
+    get bufferSize() {
+        const config = this.config.panelConfig
+        if (!config) return 32
+        return (config.header.length + 1) + config.terminator.length + config.width
     }
 }

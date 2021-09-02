@@ -2,11 +2,11 @@ import { PanelConfig } from '../types'
 
 export default class Panel {
     public config: PanelConfig;
-    public header: Uint8Array;
+    public address: number;
 
     constructor(config: PanelConfig) {
         this.config = config
-        this.header = new Uint8Array([0x80, 0x85, config.address])
+        this.address = config.address
     }
 
     get bounds() {

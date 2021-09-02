@@ -12,6 +12,7 @@ Flip dot controller library - to be used with [AlfaZeta XY5](https://flipdots.co
 | Blue  | +RS485     |
 
 ## Install
+
 ```
 npm i @ebondioli/flipper
 ```
@@ -63,44 +64,59 @@ client.send() // Sends the current buffer to the middleware, usually called on a
 
 ### Configuration
 
-The `client` expects an array of objects describing each panel's configuration.
+Example `client` config object:
 
 ```js
-const panels = [
-  {
-    // Panel address in binary
-    // note: for some reason address 2 (0b10) does not work with the current flip dot panels
-    address: 0b01,
-    // Panel dimensions
-    bounds: {
-        x: 0,
-        y: 0,
-        width: 28,
-        height: 7
-    },
-    // used to align the simulator view with the actual panels positioning
-    offset: {
-        x: 0,
-        y: 0
-    }
+const config = {
+  socket: {
+    url: "ws://localhost",
+    port: 3001,
   },
-  ...
-]
+  stage: {
+    // varies depending on the type of panel used, defaults are for AlfaZeta XY5
+    panelConfig: {
+        width: 28,
+        height: 7,
+        header: [0x80, 0x85],
+        terminator: [0x8F]
+    }
+    panels: [
+      {
+        // Panel address in binary
+        // note: for some reason address 2 (0b10) does not work with the current flip dot panels
+        address: 0b01,
+        // Panel dimensions
+        bounds: {
+          x: 0,
+          y: 0,
+          width: 28,
+          height: 7,
+        },
+        // used to align the simulator view with the actual panels positioning
+        offset: {
+          x: 0,
+          y: 0,
+        },
+      },
+    ],
+  },
+};
 ```
 
 ## Simulator
-A simple simulator is provided as a separate module for ease of development. It connects to the `client` module and replicates the panels configuration and positioning. 
+
+A simple simulator is provided as a separate module for ease of development. It connects to the `client` module and replicates the panels configuration and positioning.
 
 Example usage in a browser/frontend app:
 
 ```js
-import FlipperClient from '@ebondioli/flipper/client'
-import FlipperSimulator from '@ebondioli/flipper/simulator'
+import FlipperClient from "@ebondioli/flipper/client";
+import FlipperSimulator from "@ebondioli/flipper/simulator";
 
 const client = new FlipperClient(config);
 // Istantiate the simulator passing the client instance to connect to and a dom element where to mount it
 const simulator = new FlipperSimulator(client, document.querySelector("#app"));
 
 // Call after the client has been updated, e.g. in an interval or requestAnimationFrame
-simulator.update()
+simulator.update();
 ```

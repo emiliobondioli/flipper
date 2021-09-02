@@ -1,6 +1,23 @@
 {
-  "name": "flipper",
+  "name": "@ebondioli/flipper",
   "version": "0.1.0",
+  "description": "Flip dot controller and browser client for AlfaZeta XY5",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/emiliobondioli/flipper.git"
+  },
+  "keywords": [
+    "serial",
+    "flip-dot",
+    "fmiddleware",
+    "interface"
+  ],
+  "author": "Emilio Bondioli",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/emiliobondioli/flipper/issues"
+  },
+  "homepage": "https://github.com/emiliobondioli/flipper#readme",
   "files": [
     "dist"
   ],

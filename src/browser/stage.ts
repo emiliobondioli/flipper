@@ -64,7 +64,7 @@ export default class Stage {
     init() {
         let id = 0
         const PANEL_W = this.panelConfig?.width || 28
-        const PANEL_H = this.panelConfig?.width || 7
+        const PANEL_H = this.panelConfig?.height || 7
         const PANEL_TERMINATOR = new Uint8Array(this.panelConfig?.terminator || [0x8F])
         const PANEL_HEADER = this.panelConfig?.header || [0x80, 0x85]
         this.panels.forEach((panel, i) => {
@@ -73,7 +73,6 @@ export default class Stage {
             this.buffer.set(header, start)
             const dot_start = start + header.length
             const end = start + this.bufferSize - 1
-
             for (let c = 0; c < PANEL_W; c++) {
                 const x = panel.bounds.x + c
                 this.matrix[x] = this.matrix[x] || []

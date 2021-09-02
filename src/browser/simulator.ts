@@ -20,9 +20,7 @@ export default class Simulator {
     }
 
     setup(): void {
-        this.el.appendChild(this.container)
         const dotWidth = (this.container.clientWidth) / (this.client.width + this.client.maxOffset.x + 1)
-
         this.client.matrix.forEach(c => {
             c.forEach(d => {
                 const el = document.createElement('div')

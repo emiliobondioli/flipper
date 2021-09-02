@@ -55,7 +55,7 @@ const client = new FlipperClient({
     stage: {
         panels: [/** panel list, see below for options */]
     },
-    mock: false // if true disables serial communication
+    mock: false // if true disables socket communication
 })
 
 client.set(0, 0, true | false | 'toggle') // Flips, unflips or toggles a single dot at (0,0)

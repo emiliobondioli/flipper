@@ -1,3 +1,5 @@
+/** @module flipper/controller */
+
 import express from 'express'
 import expressWs from 'express-ws';
 import ws from 'ws'
@@ -17,12 +19,16 @@ const defaults: ControllerConfig = {
     mock: false
 }
 
-export default class FlipdotController {
+export class Controller {
     private app: expressWs.Application;
     private serial?: SerialPort
     private buffer?: Buffer
     public config: ControllerConfig;
 
+    /**
+     * 
+     * @param {ControllerConfig} config 
+     */
     constructor(config: ControllerConfig) {
         this.config = { ...defaults, ...config };
         this.app = expressWs(express()).app;
@@ -47,15 +53,19 @@ export default class FlipdotController {
         this.write()
     }
 
-    public write(): void {
-        if (!this.buffer || !this.serial) return
-        this.serial.write(this.buffer, (err) => {
+    /**
+     * Writes the current buffer to serial
+     * @returns boolean
+     */
+    public write(): boolean {
+        if (!this.buffer || !this.serial) return false
+        const t = 1000 / this.config.rate
+        setTimeout(this.write.bind(this), t)
+        return this.serial.write(this.buffer, (err) => {
             if (err) {
                 return console.log('Error on write: ', err.message)
             }
         })
-        const t = 1000 / this.config.rate
-        setTimeout(this.write.bind(this), t)
     }
 
 }

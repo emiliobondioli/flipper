@@ -24,7 +24,7 @@ const defaults: ClientConfig = {
     mock: false
 }
 
-export default class Client extends Stage {
+export class Client extends Stage {
     private socket: WebSocket | null;
     public config: ClientConfig;
 

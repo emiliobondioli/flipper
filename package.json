@@ -21,30 +21,28 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/flipper.cjs.js",
+  "main": "./dist/flipper.js",
   "module": "./dist/flipper.es.js",
+  "types": "./dist/flipper.d.ts",
   "exports": {
-    "./client": {
-      "import": "./dist/client/index.es.js",
-      "require": "./dist/client/index.cjs.js"
-    },
     "./controller": {
-      "import": "./dist/controller/index.es.js",
-      "require": "./dist/controller/index.cjs.js"
+      "import": "./dist/controller/flipper.controller.es.js",
+      "require": "./dist/controller/flipper.controller.umd.js"
     },
-    "./simulator": {
-      "import": "./dist/simulator/index.es.js",
-      "require": "./dist/simulator/index.cjs.js"
+    "./browser": {
+      "import": "./dist/browser/flipper.browser.es.js",
+      "require": "./dist/browser/flipper.browser.umd.js"
     },
-    "./simulator/style": {
-      "import": "./dist/style.css",
-      "require": "./dist/style.css"
-    }
+    "./style": "./dist/browser/style.css"
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
-    "postbuild": "tsc src/main.ts -t es5 --allowJs --declaration --emitDeclarationOnly --sourceMap --esModuleInterop --outDir dist",
+    "def": "tsc -t es5 src/main.ts --declaration --emitDeclarationOnly --jsx react --esModuleInterop --outDir dist",
+    "build": "npm run build:main && npm run build:browser && npm run build:controller && npm run build:types",
+    "build:main": "tsc && vite build",
+    "build:browser": "tsc && vite build -c vite.config.browser.js",
+    "build:controller": "tsc && vite build -c vite.config.controller.js",
+    "build:types": "tsc -m amd -t ESNext -d --isolatedModules false --allowSyntheticDefaultImports --moduleResolution node --esModuleInterop --outFile dist/flipper.js src/main.ts && rm -rf dist/flipper.js",
     "serve": "vite preview",
     "release:patch": "npm run build && npm version patch && npm publish",
     "release:minor": "npm run build && npm version minor && npm publish"

@@ -1,7 +1,7 @@
-import Client from "./client"
+import { Client } from "./client"
 import './simulator.scss'
 
-export default class Simulator {
+export class Simulator {
     public container: HTMLElement
     private client: Client;
     private dots: Array<{

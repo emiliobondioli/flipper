@@ -5,6 +5,7 @@ import expressWs from 'express-ws';
 import ws from 'ws'
 import SerialPort from 'serialport'
 import { ControllerConfig } from '../types'
+const pkg = require('../../package.json')
 
 const defaults: ControllerConfig = {
     socket: {
@@ -15,8 +16,8 @@ const defaults: ControllerConfig = {
         port: '',
         baudRate: 57600
     },
-    rate: 60,
-    mock: false
+    mock: false,
+    debug: false
 }
 
 export class Controller {
@@ -32,7 +33,7 @@ export class Controller {
     constructor(config: ControllerConfig) {
         this.config = { ...defaults, ...config };
         this.app = expressWs(express()).app;
-        this.app.listen(this.config.socket.port, () => console.log(`flipper controller listening on ${this.config.socket.url}:${this.config.socket.port}/`));
+        this.app.listen(this.config.socket.port, () => console.log(`flipper controller v${pkg.version} listening on ${this.config.socket.url}:${this.config.socket.port}/`));
         if (!this.config.mock) {
             this.serial = new SerialPort(this.config.serial.port, {
                 baudRate: 57600,
@@ -47,7 +48,11 @@ export class Controller {
         this.app.ws('/', (socket: ws) => {
             console.log('websocket connection');
             socket.on('message', (data: string) => {
-                this.buffer = Buffer.from(JSON.parse(data))
+                // if (this.config.debug) console.log('buffer received')
+                const d: object = JSON.parse(data)
+                if (d) {
+                    this.buffer = Buffer.from(Object.values(d))
+                }
             })
         });
         this.write()
@@ -57,15 +62,18 @@ export class Controller {
      * Writes the current buffer to serial
      * @returns boolean
      */
-    public write(): boolean {
-        if (!this.buffer || !this.serial) return false
-        const t = 1000 / this.config.rate
-        setTimeout(this.write.bind(this), t)
-        return this.serial.write(this.buffer, (err) => {
-            if (err) {
-                return console.log('Error on write: ', err.message)
-            }
-        })
+    public write(): void {
+        if (this.buffer && this.serial) {
+            this.serial.write(this.buffer, (err) => {
+                if (err) {
+                    console.error('error on write: ', err.message)
+                }
+                this.write()
+            })
+        } else {
+            const t = 200
+            setTimeout(this.write.bind(this), t)
+        }
     }
 
 }

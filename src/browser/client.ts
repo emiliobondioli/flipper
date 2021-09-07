@@ -21,7 +21,8 @@ const defaults: ClientConfig = {
             }
         }]
     },
-    mock: false
+    mock: false,
+    debug: false
 }
 
 export class Client extends Stage {
@@ -31,7 +32,7 @@ export class Client extends Stage {
     constructor(config: ClientConfig) {
         super(config.stage)
         this.config = { ...defaults, ...config };
-        if(!this.config.mock) this.socket = new WebSocket(`${this.config.socket.url}:${this.config.socket.port}`)
+        if (!this.config.mock) this.socket = new WebSocket(`${this.config.socket.url}:${this.config.socket.port}`)
         else this.socket = null
     }
 
@@ -39,7 +40,11 @@ export class Client extends Stage {
      * Sends the current buffer to the flip-dot middleware
      */
     send(): void {
-        if(this.socket) this.socket.send(JSON.stringify(this.buffer))
+        if (this.socket) {
+            if (this.config.debug) console.log('sending buffer to controller')
+            if (this.socket.readyState !== 1) return console.log('socket not ready')
+            this.socket.send(JSON.stringify(this.buffer))
+        }
     }
 
 }

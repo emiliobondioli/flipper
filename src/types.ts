@@ -10,7 +10,7 @@ export interface ControllerConfig {
         baudRate?: number
     }
     mock: boolean,
-    rate: number;
+    debug: boolean
 };
 
 export interface ClientConfig {
@@ -20,6 +20,7 @@ export interface ClientConfig {
     }
     stage: StageConfig,
     mock: boolean,
+    debug: boolean
 };
 
 export interface StageConfig {

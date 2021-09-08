@@ -65,9 +65,10 @@ export class Controller {
     public write(): void {
         if (this.buffer && this.serial) {
             this.serial.write(this.buffer, (err) => {
-                if (err) {
-                    console.error('error on write: ', err.message)
-                }
+                if (err) console.error(err.message)
+            })
+            this.serial.drain(err => {
+                if (err) console.error(err)
                 this.write()
             })
         } else {

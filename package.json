@@ -44,8 +44,8 @@
     "build:controller": "tsc && vite build -c vite.config.controller.js",
     "build:types": "tsc -m amd -t ESNext -d --isolatedModules false --allowSyntheticDefaultImports --moduleResolution node --esModuleInterop --outFile dist/flipper.js src/main.ts && rm -rf dist/flipper.js",
     "serve": "vite preview",
-    "release:patch": "npm run build && npm version patch && npm publish",
-    "release:minor": "npm run build && npm version minor && npm publish"
+    "release:patch": "npm run build && npm version patch && git push && git push --tags && npm publish",
+    "release:minor": "npm run build && npm version minor && git push && git push --tags && npm publish"
   },
   "devDependencies": {
     "@types/express": "^4.17.13",

@@ -32,7 +32,7 @@ export class Client extends Stage {
     constructor(config: ClientConfig) {
         super(config.stage)
         this.config = { ...defaults, ...config };
-        if (!this.config.mock) this.socket = new WebSocket(`${this.config.socket.url}:${this.config.socket.port}`)
+        if (!this.config.mock) this.socket = new WebSocket(`${this.config.socket?.url}:${this.config.socket?.port}`)
         else this.socket = null
     }
 

@@ -14,13 +14,13 @@ export interface ControllerConfig {
 };
 
 export interface ClientConfig {
-    socket: {
-        url: string
+    socket?: {
+        url?: string
         port?: number | string
     }
     stage: StageConfig,
-    mock: boolean,
-    debug: boolean
+    mock?: boolean,
+    debug?: boolean
 };
 
 export interface StageConfig {

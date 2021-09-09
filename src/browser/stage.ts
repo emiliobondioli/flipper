@@ -34,6 +34,7 @@ export default class Stage {
         x: number,
         y: number
     }
+    private offsetRelativeDraw: boolean = false;
     public matrix: Array<Array<Dot>>;
     private panels: Array<Panel>;
     private panelConfig: PanelConfig | undefined
@@ -41,6 +42,7 @@ export default class Stage {
     constructor(config: StageConfig) {
         config = { ...defaults, ...config || {} }
         this.panelConfig = config.panelConfig || defaults.panelConfig
+        this.offsetRelativeDraw = !!config.offsetRelativeDraw;
         this.width = Math.max(...config.panels.map(p => p.bounds.x + p.bounds.width))
         this.height = Math.max(...config.panels.map(p => p.bounds.y + p.bounds.height))
         this.maxOffset = {
@@ -122,6 +124,11 @@ export default class Stage {
      * @param {number,string} value - 0: off, 1: on
      */
     setCoordinates(x: number, y: number, value: number | boolean = 1): boolean {
+        if (this.offsetRelativeDraw) {
+            const panel = this.getPanel(x, y)
+            x -= panel?.offset.x || 0
+            y -= panel?.offset.y || 0
+        }
         if (x > this.width || y > this.height) {
             console.log(`coordinates (${x}, ${y}) out of bounds`)
             return false
@@ -166,6 +173,11 @@ export default class Stage {
      * @param {number} y - The y coordinate
      */
     toggleCoordinates(x: number, y: number): boolean {
+        if (this.offsetRelativeDraw) {
+            const panel = this.getPanel(x, y)
+            x -= panel?.offset.x || 0
+            y -= panel?.offset.y || 0
+        }
         let d: Dot = this.matrix[x][y]
         return this.toggleDot(d)
     }
@@ -182,10 +194,24 @@ export default class Stage {
      * Get the status of a single dot
      * @param {number} x - The x coordinate
      * @param {number} y - The y coordinate
-     * @return {number} Dot object
+     * @return {boolean} Dot value
      */
     get(x: number, y: number): boolean {
         return this.matrix[x][y].value
+    }
+
+    /**
+     * Gets the panel containing the provided coordinates
+     * @param {number} x - The x coordinate
+     * @param {number} y - The y coordinate
+     * @return {Panel | null} panel object or null if not found
+     */
+    getPanel(x: number, y: number): Panel | null {
+        return this.panels.find(p => {
+            const panelX = p.x + (this.offsetRelativeDraw ? p.offset.x : 0)
+            const panelY = p.y + (this.offsetRelativeDraw ? p.offset.y : 0)
+            return (x >= panelX && x < panelX + p.width) && (y >= panelY && y < panelY + p.height)
+        }) || null
     }
 
     /**

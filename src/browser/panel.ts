@@ -22,7 +22,7 @@ export default class Panel {
     }
 
     get y() {
-        return this.bounds.x
+        return this.bounds.y
     }
 
     get width() {
@@ -30,6 +30,6 @@ export default class Panel {
     }
 
     get height() {
-        return this.bounds.width
+        return this.bounds.height
     }
 }

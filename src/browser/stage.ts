@@ -122,6 +122,10 @@ export default class Stage {
      * @param {number,string} value - 0: off, 1: on
      */
     setCoordinates(x: number, y: number, value: number | boolean = 1): boolean {
+        if (x > this.width || y > this.height) {
+            console.log(`coordinates (${x}, ${y}) out of bounds`)
+            return false
+        }
         let d: Dot = this.matrix[x][y]
         return this.setDot(d, value)
     }

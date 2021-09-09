@@ -11,3 +11,9 @@ const config: ClientConfig = {
 
 const client = new Client(config)
 const simulator = new Simulator(client, document.getElementById('app') || document.body)
+
+function update() {
+    simulator.update()
+}
+
+update()

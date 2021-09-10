@@ -26,7 +26,6 @@ export interface ClientConfig {
 export interface StageConfig {
     panels: Array<PanelOptions>,
     panelConfig?: PanelConfig,
-    offsetRelativeDraw?: boolean
 };
 
 export interface PanelConfig {

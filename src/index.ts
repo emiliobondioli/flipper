@@ -9,7 +9,6 @@ const config: ClientConfig = {
         port: 3001
     },
     stage: {
-        offsetRelativeDraw: true,
         panels
     },
     debug: true
@@ -24,7 +23,7 @@ const bounds = {
 function update() {
     for (let i = 0; i < bounds.width; i++) {
         for (let j = 0; j < bounds.height; j++) {
-            client.set(bounds.x + i, bounds.y + j, true)
+            client.setRelative(bounds.x + i, bounds.y + j, true)
         }
     }
     simulator.update()

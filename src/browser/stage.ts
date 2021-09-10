@@ -27,8 +27,8 @@ const defaults: StageConfig = {
 }
 
 export default class Stage {
-    public width: number
-    public height: number;
+    private _width: number
+    private _height: number;
     public buffer: Uint8Array;
     public maxOffset: {
         x: number,
@@ -41,8 +41,8 @@ export default class Stage {
     constructor(config: StageConfig) {
         config = { ...defaults, ...config || {} }
         this.panelConfig = config.panelConfig || defaults.panelConfig
-        this.width = Math.max(...config.panels.map(p => p.bounds.x + p.bounds.width))
-        this.height = Math.max(...config.panels.map(p => p.bounds.y + p.bounds.height))
+        this._width = Math.max(...config.panels.map(p => p.bounds.x + p.bounds.width))
+        this._height = Math.max(...config.panels.map(p => p.bounds.y + p.bounds.height))
         this.maxOffset = {
             x: Math.max(...config.panels.map(p => p.offset.x)),
             y: Math.max(...config.panels.map(p => p.offset.y)),
@@ -245,6 +245,14 @@ export default class Stage {
                 this.set(dot, value)
             })
         })
+    }
+
+    get width() {
+        return this._width + this.maxOffset.x
+    }
+    
+    get height() {
+        return this._height + this.maxOffset.y
     }
 
     get bufferSize() {

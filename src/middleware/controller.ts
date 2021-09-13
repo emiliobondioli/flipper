@@ -1,8 +1,6 @@
 /** @module flipper/controller */
 
-import express from 'express'
-import expressWs from 'express-ws';
-import ws from 'ws'
+import WebSocket, { Server } from 'ws';
 import SerialPort from 'serialport'
 import { ControllerConfig } from '../types'
 const pkg = require('../../package.json')
@@ -21,7 +19,7 @@ const defaults: ControllerConfig = {
 }
 
 export class Controller {
-    private app: expressWs.Application;
+    private server: Server;
     private serial?: SerialPort
     private buffer?: Buffer
     public config: ControllerConfig;
@@ -32,8 +30,8 @@ export class Controller {
      */
     constructor(config: ControllerConfig) {
         this.config = { ...defaults, ...config };
-        this.app = expressWs(express()).app;
-        this.app.listen(this.config.socket.port, () => console.log(`flipper controller v${pkg.version} listening on ${this.config.socket.url}:${this.config.socket.port}/`));
+        console.log(`flipper controller v${pkg.version} listening on ${this.config.socket.url}:${this.config.socket.port}/`);
+        this.server = new Server({ port: this.config.socket.port || 3001 });
         if (!this.config.mock) {
             this.serial = new SerialPort(this.config.serial.port, {
                 baudRate: 57600,
@@ -45,7 +43,7 @@ export class Controller {
     }
 
     private setup(): void {
-        this.app.ws('/', (socket: ws) => {
+        this.server.on('connection', (socket: WebSocket) => {
             console.log('websocket connection');
             socket.on('message', (data: string) => {
                 // if (this.config.debug) console.log('buffer received')
@@ -54,7 +52,7 @@ export class Controller {
                     this.buffer = Buffer.from(Object.values(d))
                 }
             })
-        });
+        })
         this.write()
     }
 

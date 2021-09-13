@@ -3,7 +3,7 @@ import Panel from "./browser/panel";
 export interface ControllerConfig {
     socket: {
         url: string
-        port?: number | string
+        port?: number
     }
     serial: {
         port: string
@@ -16,7 +16,7 @@ export interface ControllerConfig {
 export interface ClientConfig {
     socket?: {
         url?: string
-        port?: number | string
+        port?: number
     }
     stage: StageConfig,
     mock?: boolean,

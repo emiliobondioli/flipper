@@ -17,6 +17,7 @@ const config: ClientConfig = {
 
 const client = new Client(config)
 const simulator = new Simulator(client, document.getElementById('app') || document.body)
+simulator.on('click', console.log)
 
 const bounds = {
     x: 7.5, y: 0, width: 48, height: 28

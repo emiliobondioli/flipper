@@ -55,6 +55,7 @@
     "vite": "^2.5.1"
   },
   "dependencies": {
+    "events": "^3.3.0",
     "serialport": "^9.2.0",
     "ws": "^8.2.2"
   }

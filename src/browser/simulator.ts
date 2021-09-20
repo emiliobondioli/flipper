@@ -1,7 +1,8 @@
 import { Client } from "./client"
+import { EventEmitter } from "events";
 import './simulator.scss'
 
-export class Simulator {
+export class Simulator extends EventEmitter {
     public container: HTMLElement
     private client: Client;
     private dots: Array<{
@@ -11,6 +12,7 @@ export class Simulator {
     }>
 
     constructor(client: Client, el: HTMLElement) {
+        super()
         this.client = client
         this.dots = []
         this.container = document.createElement('div')
@@ -29,6 +31,9 @@ export class Simulator {
                 el.style.height = dotWidth + 'px'
                 el.style.top = (dotWidth * (d.y + d.panel.offset.y)) + 'px'
                 el.style.left = (dotWidth * (d.x + d.panel.offset.x)) + 'px'
+                el.addEventListener('click', e => {
+                    this.emit('click', { ...dot, event: e })
+                })
                 const dot = {
                     el,
                     x: d.x,

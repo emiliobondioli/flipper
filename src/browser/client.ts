@@ -1,9 +1,9 @@
 import { ClientConfig } from "../types";
-import Stage from "./stage";
+import { Stage } from "./stage";
 
 const defaults: ClientConfig = {
     socket: {
-        url: 'ws://localhost',
+        url: 'wss://localhost',
         port: 3001
     },
     stage: {

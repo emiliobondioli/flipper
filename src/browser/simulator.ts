@@ -1,5 +1,5 @@
 import { Client } from "./client"
-import { EventEmitter } from "events";
+import EventEmitter from "events";
 import './simulator.scss'
 
 export class Simulator extends EventEmitter {

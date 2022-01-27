@@ -26,7 +26,7 @@ const defaults: StageConfig = {
     ],
 }
 
-export class Stage {
+export default class Stage {
     private _width: number
     private _height: number;
     public buffer: Uint8Array;

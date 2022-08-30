@@ -33,7 +33,7 @@ const controller = new FlipperController({
     serial: {
         port: '/dev/ttyUSB0',
         baudRate: 57600
-    }
+    },
     mock: false,    // if true disables serial communication
     rate: 60       // serial messages per second
 })

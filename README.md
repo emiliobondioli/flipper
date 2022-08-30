@@ -2,109 +2,117 @@
 
 Flip dot controller library - to be used with [AlfaZeta XY5](https://flipdots.com/en/products-services/flip-dot-boards-xy5/)
 
-## Wiring
-
-| Color | Signal |
-| ----- | ------ |
-| Red   | +24V   |
-| Black | GND    |
-| Green | -RS485 |
-| Blue  | +RS485 |
-
 ## Install
 
 ```
 npm i @ebondioli/flipper
 ```
 
-## Controller
+## Basic usage
 
-The `controller` module is required for serial communication with the flip dot panels. Since it requires `serialport` it must be run in NodeJS context. It communicates with the client through a websocket.
+The `Controller` module is required for serial communication with the flip dot panels. Since it requires the `serialport` module it must be run in NodeJS context.
 
-Example usage in a middleware script:
+### Standalone
+
+Flipper can be run in a NodeJS script using the `Controller` and `Stage` modules as follows:
 
 ```js
-const FlipperController = require('@ebondioli/flipper/controller')
-const controller = new FlipperController({
-    socket: {
-        url: 'ws://localhost',
-        port: 3001
-    },
+const { Controller, Stage } = require('@ebondioli/flipper/controller')
+// the controller will continuously write its buffer to the configured serial port
+const controller = new Controller({
     serial: {
         port: '/dev/ttyUSB0',
         baudRate: 57600
     },
     mock: false,    // if true disables serial communication
-    rate: 60       // serial messages per second
+    debug: false    // enable debug logging
 })
+const stage = new Stage({    
+  panels: [
+      // panel list, see below Panels section for options
+  ],
+  // configuration for different panel types and dimensions, defaults are for AlfaZeta XY5
+  panelConfig: {
+      width: 28,
+      height: 7,
+      header: [0x80, 0x85],
+      terminator: [0x8F]
+  }
+})
+// flips ON the dot at (0,0)
+stage.set(0, 0, true);
+// flips OFF the dot at (0,0)
+stage.set(0, 1, false);
+// send the updated buffer to the controller
+controller.set(stage.buffer)
 ```
 
-## Client
+### Websocket Client/Server
 
-The `client` module translates x/y coordinates to the related flip dot bytes. `set`, `get` and `fill` methods are used to interact with the dots.
+If you need to work in the browser, a simple Websocket client/server solution is provided:
 
-Example usage in a browser/frontend app:
-
+#### NodeJS middleware
 ```js
-import FlipperClient from "@ebondioli/flipper/client";
-const client = new FlipperClient({
+const { Controller, Server } = require('@ebondioli/flipper/controller')
+const controller = new Controller({ /* options */ })
+// the server module will automatically update the controller buffer when receiving data
+const server = new Server(controller, { 
+  socket: {
+      url: 'ws://localhost',
+      port: 3001
+  },
+  mock: false,
+  debug: false
+})
+```
+#### Browser client
+`Client` extends the `Stage` module and allows for easy websocket communication
+```js
+import { Client } from "@ebondioli/flipper/browser";
+const client = new Client({
   socket: {
     url: "ws://localhost",
     port: 3001,
   },
-  stage: {
-    panels: [
-      /** panel list, see below for options */
-    ],
-  },
+  stage: { /* stage config, see above for options */},
   mock: false, // if true disables socket communication
 });
+// flips ON the dot at (0,0)
+client.set(0, 0, true);       
+// sends the current buffer to the socket server, usually called on an interval or requestAnimationFrame
+client.send();                        
+```
+## Panels
+A panels config object is required to correctly convert the stage's dots to bytes
+```js
+const panels = [
+  {
+    // panel address in binary
+    // note: for some reason address 2 (0b10) does not work with the tested AlphaZeta panels (2015 version)
+    address: 0b01,
+    // panel dimensions
+    bounds: {
+      x: 0,
+      y: 0,
+      width: 28,
+      height: 7,
+    },
+    // used to align the simulator view with the actual panels positioning
+    offset: {
+      x: 0,
+      y: 0,
+    },
+  },
+]
+```
 
+## Stage
+The `Stage` module translates x/y coordinates to the related flip dot bytes. `set`, `get` and `fill` methods are used to interact with the dots.
+
+```js
 client.set(0, 0, true | false);       // flips or unflips a single dot at (0,0)
 client.toggle(0, 0);                  // toggles a single dot at (0,0)
 client.fill(true | false | "toggle"); // flips, unflips or toggles all dots
-client.send();                        // sends the current buffer to the middleware, usually called on an interval or requestAnimationFrame
-```
-
-### Configuration
-
-Example `client` config object:
-
-```js
-const config = {
-  socket: {
-    url: "ws://localhost",
-    port: 3001,
-  },
-  stage: {
-    // configuration for different panel types and dimensions, defaults are for AlfaZeta XY5
-    panelConfig: {
-        width: 28,
-        height: 7,
-        header: [0x80, 0x85],
-        terminator: [0x8F]
-    }
-    panels: [
-      {
-        // panel address in binary
-        // note: for some reason address 2 (0b10) does not work with the current flip dot panels
-        address: 0b01,
-        // panel dimensions
-        bounds: {
-          x: 0,
-          y: 0,
-          width: 28,
-          height: 7,
-        },
-        // used to align the simulator view with the actual panels positioning
-        offset: {
-          x: 0,
-          y: 0,
-        },
-      },
-    ],
-  },
-};
 ```
 
 ## Simulator

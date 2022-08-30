@@ -1,6 +1,6 @@
 {
   "name": "@ebondioli/flipper",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Flip dot controller and browser client for AlfaZeta XY5",
   "repository": {
     "type": "git",

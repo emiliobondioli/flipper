@@ -9,11 +9,9 @@ npm i @ebondioli/flipper
 ```
 
 ## Basic usage
-
 The `Controller` module is required for serial communication with the flip dot panels. Since it requires the `serialport` module it must be run in NodeJS context.
 
 ### Standalone
-
 Flipper can be run in a NodeJS script using the `Controller` and `Stage` modules as follows:
 
 ```js
@@ -41,14 +39,13 @@ const stage = new Stage({
 })
 // flips ON the dot at (0,0)
 stage.set(0, 0, true);
-// flips OFF the dot at (0,0)
+// flips OFF the dot at (0,1)
 stage.set(0, 1, false);
-// send the updated buffer to the controller
+// sends the updated buffer to the controller
 controller.set(stage.buffer)
 ```
 
 ### Websocket Client/Server
-
 If you need to work in the browser, a simple Websocket client/server solution is provided:
 
 #### NodeJS middleware
@@ -65,7 +62,7 @@ const server = new Server(controller, {
   debug: false
 })
 ```
-#### Browser client
+#### Browser script
 `Client` extends the `Stage` module and allows for easy websocket communication
 ```js
 import { Client } from "@ebondioli/flipper/browser";
@@ -74,7 +71,9 @@ const client = new Client({
     url: "ws://localhost",
     port: 3001,
   },
-  stage: { /* stage config, see above for options */},
+  stage: { 
+    // stage config, see above for options 
+  },
   mock: false, // if true disables socket communication
 });
 // flips ON the dot at (0,0)

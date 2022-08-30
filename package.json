@@ -1,6 +1,6 @@
 {
   "name": "@ebondioli/flipper",
-  "version": "0.5.3",
+  "version": "1.0.0",
   "description": "Flip dot controller and browser client for AlfaZeta XY5",
   "repository": {
     "type": "git",
@@ -9,7 +9,7 @@
   "keywords": [
     "serial",
     "flip-dot",
-    "fmiddleware",
+    "middleware",
     "interface"
   ],
   "author": "Emilio Bondioli",
@@ -45,7 +45,8 @@
     "build:types": "tsc -m amd -t ESNext -d --isolatedModules false --allowSyntheticDefaultImports --moduleResolution node --esModuleInterop --outFile dist/flipper.js src/main.ts && rm -rf dist/flipper.js",
     "serve": "vite preview",
     "release:patch": "npm run build && npm version patch && git push && git push --tags && npm publish",
-    "release:minor": "npm run build && npm version minor && git push && git push --tags && npm publish"
+    "release:minor": "npm run build && npm version minor && git push && git push --tags && npm publish",
+    "release:major": "npm run build && npm version major && git push && git push --tags && npm publish"
   },
   "devDependencies": {
     "@types/serialport": "^8.0.2",

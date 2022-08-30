@@ -6,7 +6,7 @@ module.exports = defineConfig({
   build: {
     outDir: resolve(__dirname, "dist/controller"),
     lib: {
-      entry: resolve(__dirname, "src/middleware/controller.ts"),
+      entry: resolve(__dirname, "src/controller/index.ts"),
       name: pkg.name,
       fileName: (format) => `flipper.controller.${format}.js`
     },

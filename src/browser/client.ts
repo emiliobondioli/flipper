@@ -1,5 +1,5 @@
 import { ClientConfig } from "../types";
-import { Stage } from "./stage";
+import { Stage } from "../controller/stage";
 
 const defaults: ClientConfig = {
     socket: {

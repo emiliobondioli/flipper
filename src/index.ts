@@ -14,7 +14,6 @@ const config: ClientConfig = {
     debug: false,
     mock: true
 }
-
 const client = new Client(config)
 const simulator = new Simulator(client, document.getElementById('app') || document.body)
 simulator.on('click', console.log)

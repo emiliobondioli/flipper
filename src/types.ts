@@ -1,14 +1,19 @@
-import Panel from "./browser/panel";
+import Panel from "./controller/panel";
 
 export interface ControllerConfig {
-    socket: {
-        url: string
-        port?: number
-    }
     serial: {
         port: string
         baudRate?: number
-    }
+    },
+    mock: boolean,
+    debug: boolean
+};
+
+export interface ServerConfig {
+    socket: {
+        url: string
+        port?: number
+    },
     mock: boolean,
     debug: boolean
 };

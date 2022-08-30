@@ -1,15 +1,10 @@
 /** @module flipper/controller */
 
-import WebSocket, { Server } from 'ws';
 import SerialPort from 'serialport'
 import { ControllerConfig } from '../types'
 const pkg = require('../../package.json')
 
 const defaults: ControllerConfig = {
-    socket: {
-        url: 'localhost',
-        port: 3001
-    },
     serial: {
         port: '',
         baudRate: 57600
@@ -19,7 +14,6 @@ const defaults: ControllerConfig = {
 }
 
 export class Controller {
-    private server: Server;
     private serial?: SerialPort
     private buffer?: Buffer
     public config: ControllerConfig;
@@ -30,8 +24,7 @@ export class Controller {
      */
     constructor(config: ControllerConfig) {
         this.config = { ...defaults, ...config };
-        console.log(`flipper controller v${pkg.version} listening on ${this.config.socket.url}:${this.config.socket.port}/`);
-        this.server = new Server({ port: this.config.socket.port || 3001 });
+        console.log(`flipper controller v${pkg.version} initialized (${this.config.serial.port})`);
         if (!this.config.mock) {
             this.serial = new SerialPort(this.config.serial.port, {
                 baudRate: 57600,
@@ -43,22 +36,18 @@ export class Controller {
     }
 
     private setup(): void {
-        this.server.on('connection', (socket: WebSocket) => {
-            console.log('websocket connection');
-            socket.on('message', (data: string) => {
-                // if (this.config.debug) console.log('buffer received')
-                const d: object = JSON.parse(data)
-                if (d) {
-                    this.buffer = Buffer.from(Object.values(d))
-                }
-            })
-        })
         this.write()
     }
 
     /**
+     * Sets the current buffer
+     */
+    public set(values: any[]): void {
+        this.buffer = Buffer.from(values)
+    }
+
+    /**
      * Writes the current buffer to serial
-     * @returns boolean
      */
     public write(): void {
         if (this.buffer && this.serial) {

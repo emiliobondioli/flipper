@@ -1,4 +1,4 @@
-import { Client } from './browser/client'
+import { Stage } from './browser/'
 import { Simulator } from './browser/simulator'
 import panels from '../panels.sample'
 import { ClientConfig } from './types'
@@ -14,7 +14,7 @@ const config: ClientConfig = {
     debug: false,
     mock: true
 }
-const client = new Client(config)
+const client = new Stage(config.stage)
 const simulator = new Simulator(client, document.getElementById('app') || document.body)
 simulator.on('click', console.log)
 
@@ -46,7 +46,7 @@ function update() {
     ctx.stroke()
     canvasToDots(ctx)
     simulator.update()
-    client.send()
+    //client.send()
 }
 
 function canvasToDots(ctx: CanvasRenderingContext2D) {

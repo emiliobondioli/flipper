@@ -1,19 +1,19 @@
-import { Client } from "./client"
+import { Stage } from "./index"
 import EventEmitter from "events";
 import './simulator.scss'
 
 export class Simulator extends EventEmitter {
     public container: HTMLElement
-    private client: Client;
+    private stage: Stage;
     private dots: Array<{
         el: HTMLElement,
         x: number,
         y: number
     }>
 
-    constructor(client: Client, el: HTMLElement) {
+    constructor(stage: Stage, el: HTMLElement) {
         super()
-        this.client = client
+        this.stage = stage
         this.dots = []
         this.container = document.createElement('div')
         this.container.classList.add('flip-dot-simulator')
@@ -22,8 +22,8 @@ export class Simulator extends EventEmitter {
     }
 
     setup(): void {
-        const dotWidth = (this.container.clientWidth) / (this.client.width + this.client.maxOffset.x + 1)
-        this.client.matrix.forEach(c => {
+        const dotWidth = (this.container.clientWidth) / (this.stage.width + this.stage.maxOffset.x + 1)
+        this.stage.matrix.forEach(c => {
             c.forEach(d => {
                 const el = document.createElement('div')
                 el.classList.add('dot')
@@ -43,12 +43,11 @@ export class Simulator extends EventEmitter {
                 this.container.appendChild(el)
             })
         });
-
     }
 
     update() {
         this.dots.forEach(d => {
-            d.el.classList.toggle('active', this.client.get(d.x, d.y))
+            d.el.classList.toggle('active', this.stage.get(d.x, d.y))
         })
     }
 }

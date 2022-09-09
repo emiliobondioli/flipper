@@ -1,13 +1,15 @@
-const { resolve } = require("path");
-const { defineConfig } = require("vite");
-const pkg = require("./package.json");
+import { resolve } from "path";
+import { defineConfig } from "vite";
 
-module.exports = defineConfig({
+export default defineConfig({
+  define: {
+    __MODULE_VERSION__: process.env.npm_package_version,
+  },
   build: {
-    outDir: resolve(__dirname, "dist/controller"),
+    outDir: resolve("./dist/controller"),
     lib: {
-      entry: resolve(__dirname, "src/controller/index.ts"),
-      name: pkg.name,
+      entry: resolve("./src/controller/index.ts"),
+      name: '@ebondioli/flipper',
       fileName: (format) => `flipper.controller.${format}.js`
     },
     rollupOptions: {

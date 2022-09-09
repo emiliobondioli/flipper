@@ -3,7 +3,7 @@
 import WebSocket, { Server } from 'ws';
 import { ServerConfig } from '../types'
 import { Controller } from './controller';
-const pkg = require('../../package.json')
+const version = '__MODULE_VERSION__';
 
 const defaults: ServerConfig = {
     socket: {
@@ -25,7 +25,7 @@ export class SocketServer {
      */
     constructor(controller: Controller, config: ServerConfig) {
         this.config = { ...defaults, ...config };
-        console.log(`flipper server v${pkg.version} listening on ${this.config.socket.url}:${this.config.socket.port}/`);
+        console.log(`flipper server v${version} listening on ${this.config.socket.url}:${this.config.socket.port}/`);
         this.server = new Server({ port: this.config.socket.port || 3001 });
         this.controller = controller
         this.setup();

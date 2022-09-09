@@ -2,7 +2,7 @@
 
 import SerialPort from 'serialport'
 import { ControllerConfig } from '../types'
-const pkg = require('../../package.json')
+const version = '__MODULE_VERSION__';
 
 const defaults: ControllerConfig = {
     serial: {
@@ -24,7 +24,7 @@ export class Controller {
      */
     constructor(config: ControllerConfig) {
         this.config = { ...defaults, ...config };
-        console.log(`flipper controller v${pkg.version} initialized (${this.config.serial.port})`);
+        console.log(`flipper controller v${version} initialized (${this.config.serial.port})`);
         if (!this.config.mock) {
             this.serial = new SerialPort(this.config.serial.port, {
                 baudRate: 57600,

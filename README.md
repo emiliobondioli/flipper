@@ -121,12 +121,12 @@ A simple simulator is provided as a separate module for ease of development. It 
 Example usage in a browser/frontend app:
 
 ```js
-import FlipperClient from "@ebondioli/flipper/client";
-import FlipperSimulator from "@ebondioli/flipper/simulator";
+import { Client, Simulator } from "@ebondioli/flipper/browser";
+import "@ebondioli/flipper/style";
 
-const client = new FlipperClient(config);
+const client = new Client(config);
 // istantiate the simulator passing the client instance to connect to and a dom element where to mount it
-const simulator = new FlipperSimulator(client, document.querySelector("#app"));
+const simulator = new Simulator(client, document.querySelector("#app"));
 
 // call after the client has been updated to update the simulator view, e.g. in an interval or requestAnimationFrame
 simulator.update();

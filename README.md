@@ -87,7 +87,6 @@ A panels config object is required to correctly convert the stage's dots to byte
 const panels = [
   {
     // panel address in binary
-    // note: for some reason address 2 (0b10) does not work with the tested AlphaZeta panels (2015 version)
     address: 0b01,
     // panel dimensions
     bounds: {
